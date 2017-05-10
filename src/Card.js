@@ -3,8 +3,8 @@ import './Card.css';
 
 class Card extends Component {
   render() {
-    const { people, person, home } = this.props;
-    if (!person || !home) return <div>loading card...</div>
+    console.log('card', this.props)
+    const { person, home } = this.props;
     return (
       <div className='card'>
         <div className='card-content'>
@@ -12,12 +12,12 @@ class Card extends Component {
           	<img src={`http://localhost:3008/${person.image}`} alt='profile'/>
             <p>
                 <span>Birthday:</span>
-                <span>{person.birthday}</span>
+                <span>{person.birth_year}</span>
             </p>
             <p>
                 {/* Note that in order to get the homeworld's name, you have to get the planet name from a different endpoint than the people */}
                 <span>Homeworld:</span>
-                <span>{home.planet}</span>
+                <span>{home}</span>
             </p>
         </div>
     </div>

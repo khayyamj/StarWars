@@ -5,7 +5,8 @@ class People extends Component {
   renderPeople () {
     this.props.people.map(person => {
       console.log(person);
-      let planet = home[indexOf(person.homeworld)];
+      let planetIndex = person.homeworld
+      let planet = home[indexOf(planetIndex)];
       console.log('planet = ', planet)
       return (
         <Card home={this.state.home} person={this.state.person}/>

@@ -9,8 +9,11 @@
   },
   "dependencies": {
     "axios": "^0.16.1",
+    "install": "^0.10.1",
+    "npm": "^4.5.0",
     "react": "^15.4.1",
-    "react-dom": "^15.4.1"
+    "react-dom": "^15.4.1",
+    "react-router": "^4.1.1"
   },
   "scripts": {
     "start": "./node_modules/.bin/concurrently \"cd ./node_modules/swapi-json-server && node app.js\" \"react-scripts start\"",

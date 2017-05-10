@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+// import { Link } from 'react-router';
 import './App.css';
 import Card from './Card.js';
 import SearchBar from "./SearchBar.js"
@@ -10,11 +11,20 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      people: {},
-      home: {},
-      person: 1
+      people: [],
+      home: [{
+        id: 1,
+        name: 'Tatooine'
+      }],
+      person: [{
+        name: 'Luke Skywalker',
+        birth_year: '19BBY',
+        image: 'luke_skywalker.jpg',
+        id: 1,
+        planet: 'Tatooine'
+      }]
     }
-
+    this.renderPeople = this.renderPeople.bind(this);
   }
   componentDidMount () {
     axios('http://localhost:3008/people')
@@ -26,8 +36,22 @@ class App extends Component {
       this.setState({ home: response.data})
     })
   }
+  renderPeople () {
+    this.state.people.map(person => {
+      let home = this.state.home
+      let planetIndex = person.homeworld;
+      let planet = home.filter( (planet) => {
+        return planet.id === planetIndex;
+      });
+      let homePlanet = planet[0].name;
+      return (
+        <div>
+          <Card home={homePlanet} person={person} />
+        </div>
+      )
+    })
+  }
   render() {
-    if (this.state.people.length === 0 || this.state.home.length === 0) return <div>Loading...</div>
     return (
       <div className='content'>
         <div className='logo'>
@@ -36,7 +60,7 @@ class App extends Component {
           <img src={wars} alt="wars-logo" />
         </div>
         <SearchBar />
-        <Card home={this.state.home} person={this.state.person}/>
+        {this.renderPeople()}
       </div>
     );
   }
