@@ -37,3 +37,6 @@
 .card p span{
 	margin: 0 10px;
 }
+.card-favorite {
+	text-align: right;
+}

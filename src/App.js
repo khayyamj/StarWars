@@ -60,7 +60,7 @@ class App extends Component {
               home={homePlanet}
               person={person}
               key={person.id}
-              update={this.editPeopleData}
+              updateProfile={this.editPeopleData}
               planets={this.state.planets}
             />
           </div>
