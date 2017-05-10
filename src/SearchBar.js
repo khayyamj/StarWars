@@ -4,9 +4,9 @@ import './SearchBar.css';
 class SearchBar extends Component {
   render() {
     return (
-      <div className='search-bar'>
-      <input placeholder='Search Your Destiny' />
-      </div>
+      <form className='search-bar' onSubmit={this.props.submit}>
+        <input placeholder='Search Your Destiny' value={this.props.value} onChange={this.props.change} type='text'/>
+      </form>
     );
   }
 }

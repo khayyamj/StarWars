@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import axios from 'axios';
 // import { Link } from 'react-router';
 import './App.css';
+import './SearchBar.css';
 import Card from './Card.js';
-import SearchBar from "./SearchBar.js"
+// import SearchBar from "./SearchBar.js"
 import star from './images/star.svg';
 import wars from './images/wars.svg';
+
+let searchTerm;
 
 class App extends Component {
   constructor(props) {
@@ -27,6 +30,7 @@ class App extends Component {
     }
     this.renderPeople = this.renderPeople.bind(this);
     this.limitLoading = this.limitLoading.bind(this);
+    this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
   }
   componentDidMount () {
     axios('http://localhost:3008/people')
@@ -39,28 +43,35 @@ class App extends Component {
     })
   }
   renderPeople () {
-
       return this.state.people
-      .filter(person => {
-        console.log('filter: ', `${person.name}`.toUpperCase().indexOf(this.state.searchTerm.toUpperCase()) >= 0)
-        return (`${person.name}`.toUpperCase().indexOf(this.state.searchTerm.toUpperCase()) >= 0)
-      })
       .map(person => {
-      let home = this.state.home
-      let planetIndex = person.homeworld;
-      let planet = home.filter( (planet) => {
-        return planet.id === planetIndex;
-      });
-      let homePlanet = planet[0].name;
-      return (
-        <div>
-          <Card home={homePlanet} person={person} key={person.id}/>
-        </div>
-      )
-    })
+        let home = this.state.home
+        let planetIndex = person.homeworld;
+        let planet = home.filter( (planet) => {
+          return planet.id === planetIndex;
+        });
+        let homePlanet = planet[0].name;
+        return (
+          <div>
+            <Card home={homePlanet} person={person} key={person.id}/>
+          </div>
+        )
+      })
   }
   handleSearchChange (event) {
-    this.setState({ searchTerm: event.target.value })
+    console.log('SearchTerm: ', event.target.value)
+    searchTerm = event.target.value
+    this.setState({ searchTerm })
+
+  }
+  handleSearchSubmit (event) {
+    console.log('searchTerm: ', this.state.searchTerm, searchTerm)
+    event.preventDefault();
+    axios(`http://localhost:3008/people?q=${searchTerm}`)
+    .then(response => {
+      console.log('search string ', `http://localhost:3008/people?=${searchTerm}` )
+      this.setState({ person: response.data, people: response.data })
+    })
   }
   limitLoading (lower, upper) {
     axios(`http://localhost:3008/people?_start=${lower}&_end=${upper}`)
@@ -88,7 +99,7 @@ class App extends Component {
             <a onClick={() => this.limitLoading(30, 39)}>31 - 40</a>
           </h3>
           <h3>
-            <a onClick={() => this.limitLoading(40, 49)}>41 -50</a>
+            <a onClick={() => this.limitLoading(40, 49)}>41 - 50</a>
           </h3>
           <h3>
             <a onClick={() => this.limitLoading(50, 59)}>51 - 60</a>
@@ -103,10 +114,16 @@ class App extends Component {
             <a onClick={() => this.limitLoading(80, 82)}>81 - 83</a>
           </h3>
         </div>
-        <SearchBar
-          onChange={this.handleSearchChange}
-          value={this.state.searchTerm}/>
-          {this.state.searchTerm}
+        <form onSubmit={this.handleSearchSubmit}>
+          <input
+            className='search-bar'
+            type='text'
+            onChange={this.handleSearchChange}
+            value={this.state.searchTerm}
+            placeholder='Search Your Destiny'
+          />
+        </form>
+        {this.state.searchTerm}
         {this.renderPeople()}
       </div>
     );
