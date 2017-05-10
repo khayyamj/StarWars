@@ -7,25 +7,49 @@ class Card extends Component {
   constructor (props) {
     super(props);
     this.state = {
-      visible: false
+      visible: false,
+      name: this.props.person.name,
+      birthday: this.props.person.birth_year,
+      url: this.props.person.image
     }
+  }
+  editName (event) {
+    console.log('info ->', event.target.value)
+    this.setState({ name: event.target.value})
+  }
+  editBirth (event) {
+    this.setState({ birthday: event.target.value})
+  }
+  editUrl (event) {
+    this.setState({ url: event.target.value})
   }
   displayEditform () {
     const { person, home } = this.props;
     this.setState({ visible: !this.state.visible});
-    console.log('visible toggle')
     if (this.state.visible) {
       editForm = (<form onSubmit={this.handleFormSubmit}>
         <h2>Update:</h2>
-        <input placeholder={person.name} name='name' />
-        <input placeholder={person.birth_year} name='birth_year' />
-        <input placeholder={person.image} name='url' />
+        <input placeholder={this.state.name} name='name' onChange={this.editName.bind(this)} value={this.state.name} />
+        <input placeholder={this.state.birthday} name='birth_year' onChange={this.editBirth.bind(this)} value={this.state.birthday} />
+        <input placeholder={this.url} name='url' onChange={this.editUrl.bind(this)} value={this.state.url} />
+        <button type='submit' value='submit'>Submit</button>
       </form>)
     } else {
       editForm = '';
     }
   }
+  handleFormSubmit (event) {
+    event.preventDefault();
+    console.log('form submit ->',this.state.name, this.state.birthday, this.state.url)
+    this.props.update({
+      name: this.state.name,
+      birthday: this.state.birthday,
+      url: this.state.url,
+      id: this.props.person.id
+    })
+  }
   render() {
+    console.log('render state: ', this.state)
     const { person, home } = this.props;
     return (
       <div className='card'>
@@ -41,7 +65,7 @@ class Card extends Component {
                 <span>Homeworld:</span>
                 <span>{home}</span>
             </p>
-            <h3><a onClick={() => this.displayEditform(person, home)}>Edit</a></h3>
+            <h3><a onClick={() => this.displayEditform()}>Edit</a></h3>
             {editForm}
         </div>
     </div>

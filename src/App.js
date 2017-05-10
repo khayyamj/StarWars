@@ -53,7 +53,12 @@ class App extends Component {
         let homePlanet = planet[0].name;
         return (
           <div>
-            <Card home={homePlanet} person={person} key={person.id}/>
+            <Card
+              home={homePlanet}
+              person={person}
+              key={person.id}
+              update={this.editPeopleData}
+            />
           </div>
         )
       })
@@ -76,6 +81,13 @@ class App extends Component {
   limitLoading (lower, upper) {
     axios(`http://localhost:3008/people?_start=${lower}&_end=${upper}`)
     .then(response => this.setState({ people: response.data }))
+  }
+  editPeopleData (update) {
+    console.log('update', update)
+    axios.patch(`http://localhost:3008/people/${update.id}`, update).
+    then(response => {
+      console.log('Edit Profile Update -> ', response.data)
+    })
   }
   render() {
     return (
