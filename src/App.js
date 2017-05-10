@@ -22,7 +22,8 @@ class App extends Component {
         image: 'luke_skywalker.jpg',
         id: 1,
         planet: 'Tatooine'
-      }]
+      }],
+      searchTerm: ''
     }
     this.renderPeople = this.renderPeople.bind(this);
   }
@@ -37,7 +38,7 @@ class App extends Component {
     })
   }
   renderPeople () {
-    this.state.people.map(person => {
+    return this.state.people.map(person => {
       let home = this.state.home
       let planetIndex = person.homeworld;
       let planet = home.filter( (planet) => {
@@ -51,6 +52,9 @@ class App extends Component {
       )
     })
   }
+  handleSearchChange (event) {
+    this.setState({ searchTerm: event.target.value })
+  }
   render() {
     return (
       <div className='content'>
@@ -59,7 +63,7 @@ class App extends Component {
           <span className='interview-text'>The Interview</span>
           <img src={wars} alt="wars-logo" />
         </div>
-        <SearchBar />
+        <SearchBar onChange={this.handleSearchChange} value={this.state.searchTerm}/>
         {this.renderPeople()}
       </div>
     );
