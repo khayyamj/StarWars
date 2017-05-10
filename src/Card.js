@@ -1,7 +1,30 @@
 import React, { Component } from 'react';
 import './Card.css';
 
+let editForm='';
+
 class Card extends Component {
+  constructor (props) {
+    super(props);
+    this.state = {
+      visible: false
+    }
+  }
+  displayEditform () {
+    const { person, home } = this.props;
+    this.setState({ visible: !this.state.visible});
+    console.log('visible toggle')
+    if (this.state.visible) {
+      editForm = (<form onSubmit={this.handleFormSubmit}>
+        <h2>Update:</h2>
+        <input placeholder={person.name} name='name' />
+        <input placeholder={person.birth_year} name='birth_year' />
+        <input placeholder={person.image} name='url' />
+      </form>)
+    } else {
+      editForm = '';
+    }
+  }
   render() {
     const { person, home } = this.props;
     return (
@@ -18,6 +41,8 @@ class Card extends Component {
                 <span>Homeworld:</span>
                 <span>{home}</span>
             </p>
+            <h3><a onClick={() => this.displayEditform(person, home)}>Edit</a></h3>
+            {editForm}
         </div>
     </div>
 

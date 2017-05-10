@@ -33,7 +33,7 @@ class App extends Component {
     this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
   }
   componentDidMount () {
-    axios('http://localhost:3008/people')
+    axios('http://localhost:3008/people?_start=0&_end=9')
     .then(response => {
       this.setState({ people: response.data})
     })
