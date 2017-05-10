@@ -10,8 +10,10 @@ class Card extends Component {
       visible: false,
       name: this.props.person.name,
       birthday: this.props.person.birth_year,
-      url: this.props.person.image
+      url: this.props.person.image,
+      planet: this.props.home
     }
+    this.planetOptions = this.planetOptions.bind(this);
   }
   editName (event) {
     console.log('info ->', event.target.value)
@@ -23,8 +25,19 @@ class Card extends Component {
   editUrl (event) {
     this.setState({ url: event.target.value})
   }
+  editPlanet (event) {
+    this.setState({ planet: event.target.planet })
+  }
+  planetOptions () {
+    console.log('planet options')
+    return this.props.planets.map(planet => {
+      console.log('planet - ', planet)
+      return (
+        <option value={planet.id}>{planet.name}</option>
+      )
+    })
+  }
   displayEditform () {
-    const { person, home } = this.props;
     this.setState({ visible: !this.state.visible});
     if (this.state.visible) {
       editForm = (<form onSubmit={this.handleFormSubmit}>
@@ -32,6 +45,9 @@ class Card extends Component {
         <input placeholder={this.state.name} name='name' onChange={this.editName.bind(this)} value={this.state.name} />
         <input placeholder={this.state.birthday} name='birth_year' onChange={this.editBirth.bind(this)} value={this.state.birthday} />
         <input placeholder={this.url} name='url' onChange={this.editUrl.bind(this)} value={this.state.url} />
+        <select name='planet' value={this.state.planet} onChange={this.editPlanet.bind(this)}>
+          {this.planetOptions()}
+        </select>
         <button type='submit' value='submit'>Submit</button>
       </form>)
     } else {
@@ -49,7 +65,6 @@ class Card extends Component {
     })
   }
   render() {
-    console.log('render state: ', this.state)
     const { person, home } = this.props;
     return (
       <div className='card'>

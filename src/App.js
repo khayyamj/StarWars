@@ -26,12 +26,14 @@ class App extends Component {
         id: 1,
         planet: 'Tatooine'
       }],
-      searchTerm: ''
+      searchTerm: '',
+      planets: []
     }
     this.renderPeople = this.renderPeople.bind(this);
     this.limitLoading = this.limitLoading.bind(this);
     this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
   }
+
   componentDidMount () {
     axios('http://localhost:3008/people?_start=0&_end=9')
     .then(response => {
@@ -39,7 +41,8 @@ class App extends Component {
     })
     axios('http://localhost:3008/planets')
     .then(response => {
-      this.setState({ home: response.data})
+      this.setState({ home: response.data })
+      this.setState({ planets: response.data })
     })
   }
   renderPeople () {
@@ -58,6 +61,7 @@ class App extends Component {
               person={person}
               key={person.id}
               update={this.editPeopleData}
+              planets={this.state.planets}
             />
           </div>
         )
